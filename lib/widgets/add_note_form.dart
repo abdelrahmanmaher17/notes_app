@@ -1,6 +1,7 @@
 // ignore: camel_case_types
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
 import 'package:notes_app/cubits/add_note_cubit/add_note_cubit.dart';
 import 'package:notes_app/models/note_model.dart';
 import 'package:notes_app/widgets/custom_bottom.dart';
@@ -51,14 +52,18 @@ class _AddNoteFormState extends State<AddNoteForm> {
             builder: (context, state) {
               return CustomBottom(
                 isloading: state is AddNoteLoading ? true : false,
-              
                 ontap: () {
                   if (formkey.currentState!.validate()) {
                     formkey.currentState!.save();
+
+                    var currentdate = DateTime.now();
+
+                    var formatedcurrentdate =
+                        DateFormat.yMd().format(currentdate);
                     var notemodel = NoteModel(
                         title: title!,
                         subtitle: content!,
-                        date: DateTime.now().toString(),
+                        date: formatedcurrentdate,
                         color: Colors.blue.value);
                     BlocProvider.of<AddNoteCubit>(context).addNote(notemodel);
                   } else {
